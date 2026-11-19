@@ -95,22 +95,3 @@ MTHProject.slnx
 | `MTHHelper\IniConfigHelper.cs` | ini 读写，先 UTF-8 解析、GBK 回退（解决 Win32 API `GetPrivateProfileString` 读 UTF-8 中文键乱码的问题） |
 | `MTHDAL\SQLHelper.cs` | 连接串读取（调用 IniConfigHelper） + 通用 `GetDataSet` / `ExecuteNonQuery` 封装 |
 | `MTHControlLib\*` | 自绘 WinForms 控件，均继承自 `UserControl` |
-
-## 踩过的坑（面试能展开讲）
-
-1. **ini 编码陷阱** — `Device.ini` 为 UTF-8 无 BOM，而最初用 Win32 `GetPrivateProfileString(..., CharSet.Ansi)` 按 GBK 解码，中文节名 `[数据库]` 变 `[鏁版嵁搴揮`，取到空连接串导致数据库全连不上。修复：改用托管实现，先 UTF-8 读，失败再 GBK 回退。
-2. **WinForms DataGridView 选中时序** — `Rows.Add()` 后 `CurrentCell` 自动落在 (0,0)，导致首行列标题闪高亮。修复：把列标题 `SelectionBackColor` 设为与 `BackColor` 一致。
-3. **定时器生命周期** — 主窗体 Dispose 子窗体时不触发 `FormClosing`，子窗体里的 `System.Windows.Forms.Timer` 继续触发，此时 `StripChartX.PlotSingle` 内部 `Chart.Invalidate()` 对已释放对象抛 NRE。修复：tick 开头判 `IsDisposed || Disposing`，命中则停表。
-4. **SQL Server LocalDB vs 命名实例** — 开发机用 `(localdb)\MSSQLLocalDB` 能跑，现场是命名实例 `SERVER\SQLEXPRESS`，连接串要写全称。
-
-## 已知局限（改进方向）
-
-- 框架版本偏旧：.NET Framework 4.7.2 + WinForms，建议后续迁移到 .NET 8 + WPF/Blazor
-- 通信层未抽象接口：Modbus 写死 TCP，扩 RTU/OPC UA 要改核心代码，建议抽 `IDeviceDriver`
-- 无单元测试：协议帧组解、CRC 校验其实非常适合覆盖
-- 密码加盐值硬编码在代码里，理想做法是配 `app.config` 或证书加密
-- 全局静态类 `CommonMethods` 耦合较重，引入 DI 容器（Autofac / DryIoc）会更干净
-
-## 许可证
-
-MIT
