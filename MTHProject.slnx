@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="MTHBLL/MTHBLL.csproj" Id="8f022044-1859-4971-831d-a760a284cbe1" />
+  <Project Path="MTHControlLib/MTHControlLib.csproj" Id="76700fe4-e226-4dc7-8637-ae6f4fa0c762" />
+  <Project Path="MTHDAL/MTHDAL.csproj" Id="fc421c0d-c24f-4c1a-bf6f-dbc0f3596fee" />
+  <Project Path="MTHHelper/MTHHelper.csproj" Id="391b105c-6567-4ff8-bf6e-176ac7cce4e2" />
+  <Project Path="MTHModels/MTHModels.csproj" Id="9d0fe17f-6e97-426e-a5eb-cffe5ff4ac5a" />
+  <Project Path="MTHProject/MTHProject.csproj" Id="40d680ff-4619-4027-8512-fd44bb8d123f" />
+</Solution>
